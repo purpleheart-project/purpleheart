@@ -9,9 +9,17 @@ const isDevelopment = process.env.NODE_ENV !== 'production';
 module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
-    client: { overlay: false },
+    // client: { overlay: false },
     port: 9050,
     open: false, // 打开浏览器，默认false
+    proxy: {
+      '/api': {
+        target: 'https://purpleheart.rico.org.cn',
+        changeOrigin: true,
+        pathRewrite: {'/api' : '/'}
+      }
+    },
+    historyApiFallback:true
   },
   entry: {
     main: './src/main.tsx',
