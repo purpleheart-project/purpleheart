@@ -2,6 +2,7 @@ const path = require('path');
 const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const WebpackBar = require('webpackbar');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -9,6 +10,8 @@ module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     client: { overlay: false },
+    port: 9050,
+    open: false, // 打开浏览器，默认false
   },
   entry: {
     main: './src/main.tsx',
@@ -34,6 +37,7 @@ module.exports = {
                   react: {
                     runtime: 'automatic',
                     refresh: isDevelopment,
+                    "importSource": "@emotion/react"
                   },
                 },
               },
@@ -70,6 +74,7 @@ module.exports = {
     ],
   },
   plugins: [
+    new WebpackBar(),
     isDevelopment && new ReactRefreshPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
