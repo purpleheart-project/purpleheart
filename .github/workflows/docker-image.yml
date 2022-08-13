@@ -30,4 +30,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: zhangtao25/purpleheart-ui:${{ steps.extract_branch.outputs.branch }}
+          tags: zhangtao25/purpleheart:${{ steps.extract_branch.outputs.branch }}

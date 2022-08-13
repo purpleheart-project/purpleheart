@@ -3,6 +3,7 @@ const ReactRefreshPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const WebpackBar = require('webpackbar');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -84,6 +85,22 @@ module.exports = {
   },
   plugins: [
     new WebpackBar(),
+    new CopyWebpackPlugin({
+      patterns: [
+        {
+          from: "public",
+          filter: async (resourcePath) => {
+            // 排除index.html
+            if (resourcePath.includes('public/index.html')) {
+              return false;
+            }
+            if (resourcePath.includes('public/index.pro.html')) {
+              return false;
+            }
+            return true;
+          },
+        }],
+    }),
     isDevelopment && new ReactRefreshPlugin(),
     new ForkTsCheckerWebpackPlugin(),
     new HtmlWebpackPlugin({
