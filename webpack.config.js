@@ -11,11 +11,11 @@ module.exports = {
   mode: isDevelopment ? 'development' : 'production',
   devServer: {
     // client: { overlay: false },
-    port: 9050,
+    port: 8000,
     open: false, // 打开浏览器，默认false
     proxy: {
       '/api': {
-        target: 'https://purpleheart.rico.org.cn',
+        target: 'http://127.0.0.1:8080',
         changeOrigin: true,
         pathRewrite: { '/api': '/' },
       },

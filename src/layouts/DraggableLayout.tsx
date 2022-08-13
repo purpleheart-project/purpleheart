@@ -7,7 +7,7 @@ type Direction = 'horizontal' | 'vertical';
 const DividerLine = styled.div<{ direction: Direction }>`
   width: ${(props) => (props.direction === 'vertical' ? '100%' : '1px')};
   height: ${(props) => (props.direction === 'vertical' ? '1px' : '100%')};
-  background-color: rebeccapurple;
+  background-color: #EDEDED;
   transition: box-shadow 0.2s;
 }
 `;

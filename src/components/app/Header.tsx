@@ -70,7 +70,7 @@ const AppHeader: FC<Props> = ({ userinfo, workspaces }) => {
                   padding: 0 6px;
                 `}
               >
-                <SmartButton>AREX</SmartButton>
+                <SmartButton>PURPLEHEART</SmartButton>
               </HoverWrapper>
             </TopNavigationButton>
 

@@ -9,7 +9,57 @@ import axios from 'axios';
 import React, { useEffect, useImperativeHandle, useMemo, useState } from 'react';
 
 import { NodeType } from '../../constant';
+import { FileService } from '../../services/FileService';
 import CollectionTitle from './CollectionTitle';
+import styled from "@emotion/styled";
+const CollectionMenuWrapper = styled.div`
+  height: 100%;
+  .ant-spin-nested-loading,
+  .ant-spin {
+    height: 100%;
+    max-height: 100% !important;
+  }
+
+  .collection-header {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    .collection-header-create {
+      margin-right: 5px;
+      span.action {
+        font-weight: bold;
+      }
+    }
+    .collection-header-search {
+    }
+    .collection-header-view {
+      margin: 0 5px;
+    }
+  }
+
+  .collection-title-render {
+    display: flex;
+    .right {
+    }
+    .left {
+      flex: 1;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      .content {
+        overflow: hidden; //超出的文本隐藏
+        text-overflow: ellipsis; //溢出用省略号显示
+        white-space: nowrap; //溢出不换行
+      }
+    }
+  }
+  .ant-tree-node-content-wrapper {
+    overflow: hidden; //超出的文本隐藏
+    text-overflow: ellipsis; //溢出用省略号显示
+    white-space: nowrap; //溢出不换行
+  }
+`;
 
 // import CollectionTitleRender from './CollectionTitleRender';
 // import { arrToTree } from '../../helpers/collection/util';
@@ -35,17 +85,14 @@ const CollectionMenu = ({ value, onSelect }) => {
     data: treeData = [],
     loading,
     run: fetchTreeData,
-  } = useRequest(() => axios.get('/api/collection').then((res) => res.data), {
+  } = useRequest(() => FileService.listCollections({}), {
     onSuccess: (res) => {
-      if (res.length) {
-        console.log(res);
-      }
+      console.log(res, 'res');
     },
   });
 
   return (
-    <div className={'collection'}>
-      {JSON.stringify(treeData)}
+    <CollectionMenuWrapper>
       <Tree
         autoExpandParent
         blockNode={true}
@@ -59,7 +106,7 @@ const CollectionMenu = ({ value, onSelect }) => {
           <CollectionTitle updateDirectoryTreeData={fetchTreeData} val={val} treeData={treeData} />
         )}
       />
-    </div>
+    </CollectionMenuWrapper>
   );
 };
 
