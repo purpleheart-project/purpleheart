@@ -12,7 +12,7 @@ function App() {
   return (
     <div
       css={css`
-        background-color: rebeccapurple;
+        //background-color: rebeccapurple;
       `}
     >
       {useRoutesRouterConfig}

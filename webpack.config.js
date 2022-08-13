@@ -16,10 +16,10 @@ module.exports = {
       '/api': {
         target: 'https://purpleheart.rico.org.cn',
         changeOrigin: true,
-        pathRewrite: {'/api' : '/'}
-      }
+        pathRewrite: { '/api': '/' },
+      },
     },
-    historyApiFallback:true
+    historyApiFallback: true,
   },
   entry: {
     main: './src/main.tsx',
@@ -39,13 +39,13 @@ module.exports = {
                   syntax: 'typescript',
                   tsx: true,
                   dynamicImport: true,
-                  "decorators": true
+                  decorators: true,
                 },
                 transform: {
                   react: {
                     runtime: 'automatic',
                     refresh: isDevelopment,
-                    "importSource": "@emotion/react"
+                    importSource: '@emotion/react',
                   },
                 },
               },
@@ -55,7 +55,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
       },
       {
         test: /\.less$/,
@@ -65,7 +65,8 @@ module.exports = {
           },
           {
             loader: 'css-loader', // translates CSS into CommonJS
-          }, {
+          },
+          {
             loader: 'less-loader', // compiles Less to CSS
             options: {
               lessOptions: {
@@ -74,11 +75,11 @@ module.exports = {
                   // 'link-color': '#CF5659'
                 },
                 javascriptEnabled: true,
-              }
-            }
+              },
+            },
           },
-        ]
-      }
+        ],
+      },
     ],
   },
   plugins: [
@@ -90,6 +91,7 @@ module.exports = {
       template: './public/index.html',
     }),
   ].filter(Boolean),
+  devtool: 'source-map',
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
   },
