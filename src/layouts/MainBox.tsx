@@ -218,7 +218,6 @@ const MainBox = () => {
     <>
       {/*AppHeader部分*/}
       <AppHeader workspaces={[]} userinfo={{}} />
-      {JSON.stringify(activePane)}
       <DraggableLayout
         firstNode={
           <div
