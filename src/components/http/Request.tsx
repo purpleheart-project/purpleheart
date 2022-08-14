@@ -32,20 +32,20 @@ const RequestTypeOptions = METHODS.map((method) => ({
   label: method,
   value: method,
 }));
-const HttpRequest = ({ id, data }) => {
+const HttpRequest = ({ id,pid, data }) => {
   console.log(data, 'data');
   const { collectionTreeData, extensionInstalled, setPanes } = useStore();
   // 如果是case(2)类型的话，就一定有一个父节点，类型也一定是request(1)
   const nodeInfoInCollectionTreeData = useMemo(() => {
-    console.log({ id, collectionTreeData });
-    const paths = treeFindPath(collectionTreeData, (node) => node.key === id);
+    console.log({ pid, collectionTreeData });
+    const paths = treeFindPath(collectionTreeData, (node) => node.key === pid);
 
     return {
       self: paths[paths.length - 1],
       parent: paths[paths.length - 2],
       raw: paths,
     };
-  }, [collectionTreeData, id]);
+  }, [collectionTreeData, pid]);
   const [method, setMethod] = useState<typeof METHODS[number]>(MethodEnum.GET);
   const [url, setUrl] = useState('');
   const handleUrlChange = (value: string) => {

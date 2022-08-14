@@ -10,8 +10,8 @@ import { useStore } from '../store';
 
 const RequestPage = ({ id }) => {
   const { collectionTreeData } = useStore();
-  const idd = useMemo(() => {
-    return treeFind(collectionTreeData, (node) => node.key === id).relationshipRequestId;
+  const realId = useMemo(() => {
+    return treeFind(collectionTreeData, (node) => node.key === id)?.relationshipRequestId;
   }, [id]);
 
   const {
@@ -21,7 +21,7 @@ const RequestPage = ({ id }) => {
   } = useRequest(
     () => {
       const a = treeFind(collectionTreeData, (node) => node.key === id);
-      return request({ method: 'GET', url: `/api/request/${a.relationshipRequestId}` });
+      return request({ method: 'GET', url: `/api/request/${a?.relationshipRequestId}` });
     },
     {
       onSuccess: (res) => {
@@ -39,7 +39,7 @@ const RequestPage = ({ id }) => {
         height: 1500px;
       `}
     >
-      {data ? <HttpRequest id={idd} data={data}></HttpRequest> : null}
+      {data ? <HttpRequest id={realId} pid={id} data={data}></HttpRequest> : null}
     </div>
   );
 };
