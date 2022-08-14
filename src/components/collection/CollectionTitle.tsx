@@ -5,6 +5,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import { FileService } from '../../services/FileService';
 import { RequestService } from '../../services/RequestService';
+import {css} from "@emotion/react";
+import {methodMap} from "../../constant";
 
 function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNewRequest }: any) {
   const _useParams = useParams();
@@ -112,7 +114,7 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
       <div className={'collection-title-render'}>
         <div className={'left'}>
           {val.nodeType === 1 && val.nodeType === 1 ? (
-            <ApiOutlined style={{ color: '#5C4033', marginRight: '8px' }} />
+            <span css={css(`color:${methodMap[val.requestMethod||'GET'].color};margin-right:4px`)}>{val.requestMethod}</span>
           ) : null}
           {val.nodeType === 2 ? (
             <span
