@@ -1,5 +1,3 @@
-
-
 const WorkspacePage = () => {
   return <div>WorkspacePage</div>;
 };

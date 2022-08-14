@@ -1,6 +1,7 @@
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, MenuOutlined, PlusOutlined } from '@ant-design/icons';
+import styled from '@emotion/styled';
 import { useMount, useRequest } from 'ahooks';
-import { Button, Tree } from 'antd';
+import { Button, Input, Tree } from 'antd';
 import type { DataNode } from 'antd/es/tree';
 import type { DirectoryTreeProps } from 'antd/lib/tree';
 import axios from 'axios';
@@ -10,8 +11,9 @@ import React, { useEffect, useImperativeHandle, useMemo, useState } from 'react'
 
 import { NodeType } from '../../constant';
 import { FileService } from '../../services/FileService';
+import { useStore } from '../../store';
+import TooltipButton from '../TooltipButton';
 import CollectionTitle from './CollectionTitle';
-import styled from "@emotion/styled";
 const CollectionMenuWrapper = styled.div`
   height: 100%;
   .ant-spin-nested-loading,
@@ -69,6 +71,7 @@ export type nodeType = {
   nodeType: NodeType;
 } & DataNode;
 const CollectionMenu = ({ value, onSelect }) => {
+  const { setCollectionTreeData } = useStore();
   const selectedKeys = useMemo(() => (value ? [value] : []), [value]);
   const [expandedKeys, setExpandedKeys] = useState<React.Key[]>([]);
   const handleSelect: DirectoryTreeProps<nodeType>['onSelect'] = (keys, info) => {
@@ -88,11 +91,52 @@ const CollectionMenu = ({ value, onSelect }) => {
   } = useRequest(() => FileService.listCollections({}), {
     onSuccess: (res) => {
       console.log(res, 'res');
+      setCollectionTreeData(res);
+      // setColl
     },
   });
 
+  const { run: createCollection } = useRequest(
+    () =>
+      FileService.createACollection({
+        name: 'Top Folder',
+        nodeType: 3,
+        pid: 0,
+      }).then((res) => {
+        console.log(res);
+      }),
+    {
+      manual: true,
+      onSuccess() {
+        fetchTreeData();
+      },
+    },
+  );
+
   return (
     <CollectionMenuWrapper>
+      <div className={'collection-header'}>
+        <TooltipButton
+          icon={<PlusOutlined />}
+          type='text'
+          size='small'
+          className={'collection-header-create'}
+          onClick={createCollection}
+          placement='bottomLeft'
+          title={'Create New'}
+        />
+        <Input
+          className={'collection-header-search'}
+          size='small'
+          placeholder=''
+          prefix={<MenuOutlined />}
+        />
+        {/*<Tooltip placement='bottomLeft' title={'View more actions'} mouseEnterDelay={0.5}>*/}
+        {/*  <Button className={'collection-header-view'} type='text' size='small'>*/}
+        {/*    <DashOutlined />*/}
+        {/*  </Button>*/}
+        {/*</Tooltip>*/}
+      </div>
       <Tree
         autoExpandParent
         blockNode={true}

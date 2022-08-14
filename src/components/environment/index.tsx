@@ -1,5 +1,3 @@
-
-
 const EnvironmentMenu = () => {
   return <div>Environment</div>;
 };

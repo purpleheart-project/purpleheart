@@ -218,6 +218,7 @@ const MainBox = () => {
     <>
       {/*AppHeader部分*/}
       <AppHeader workspaces={[]} userinfo={{}} />
+      {JSON.stringify(activePane)}
       <DraggableLayout
         firstNode={
           <div
@@ -283,7 +284,7 @@ const MainBox = () => {
               {panes.map((pane) => (
                 <MainTabPane className='main-tab-pane' tab={pane.title} key={pane.key}>
                   {/* TODO 工作区自定义组件待规范，参考 menuItem */}
-                  {pane.pageType === PageTypeEnum.Request && <RequestPage />}
+                  {pane.pageType === PageTypeEnum.Request && <RequestPage id={pane.key} />}
                   {pane.pageType === PageTypeEnum.Folder && <FolderPage />}
                   {pane.pageType === PageTypeEnum.Environment && <EnvironmentPage />}
                   {pane.pageType === PageTypeEnum.Workspace && <WorkspacePage />}

@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css';
-
+import './locales/i18n'
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

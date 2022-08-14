@@ -3,6 +3,9 @@ import { Dropdown, Menu, Popconfirm, Space } from 'antd';
 import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
+import { FileService } from '../../services/FileService';
+import { RequestService } from '../../services/RequestService';
+
 function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNewRequest }: any) {
   const _useParams = useParams();
   const _useNavigate = useNavigate();
@@ -12,15 +15,43 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
   };
   const [CollectionCreateAndUpdateModal, setCollectionCreateAndUpdateModal] = useState({});
   const menu = (val: any) => {
+    // console.log(val,'val')
     return (
       <Menu
         onClick={(e) => {
           switch (e.key) {
             case '3':
+              const params3 = {
+                name: 'New Folder',
+                nodeType: 3,
+                pid: val.id,
+              };
+              FileService.createACollection(params3).then((res) => {
+                console.log(res);
+                updateDirectoryTreeData();
+              });
               break;
             case '1':
+              const params1 = {
+                name: 'New Req',
+                nodeType: 1,
+                pid: val.id,
+              };
+              FileService.createACollection(params1).then((res) => {
+                console.log(res);
+                updateDirectoryTreeData();
+              });
               break;
             case '2':
+              const params2 = {
+                name: 'New Ex',
+                nodeType: 2,
+                pid: val.id,
+              };
+              FileService.createACollection(params2).then((res) => {
+                console.log(res);
+                updateDirectoryTreeData();
+              });
               break;
             case '4':
               break;
@@ -55,13 +86,19 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
             label: <span className={'dropdown-click-target'}>Rename</span>,
           },
           {
-            key: '6',
-            label: <span className={'dropdown-click-target'}>Duplicate</span>,
-          },
-          {
             key: '5',
             label: (
-              <Popconfirm title='Are you sure？' okText='Yes' cancelText='No' onConfirm={() => {}}>
+              <Popconfirm
+                title='Are you sure？'
+                okText='Yes'
+                cancelText='No'
+                onConfirm={() => {
+                  FileService.deleteACollection({ id: val.id }).then((res) => {
+                    console.log(res);
+                    updateDirectoryTreeData();
+                  });
+                }}
+              >
                 <a style={{ color: 'red' }}>Delete</a>
               </Popconfirm>
             ),

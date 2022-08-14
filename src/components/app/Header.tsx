@@ -2,13 +2,14 @@ import { DownOutlined, SettingOutlined, UserAddOutlined } from '@ant-design/icon
 import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { Avatar, Button, Dropdown, Menu, Space } from 'antd';
-import { FC, useState } from 'react';
+import {FC, useState, useTransition} from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import Setting from '../setting';
 import SmartButton from '../smart/Button';
 import HoverWrapper from '../smart/HoverWrapper';
 import AppGitHubStarButton from './GitHubStarButton';
+import {useTranslation} from "react-i18next";
 type Props = {
   userinfo: any;
   workspaces: any[];
@@ -44,6 +45,7 @@ const DownOutlinedCx = styled(DownOutlined)`
 `;
 const AppHeader: FC<Props> = ({ userinfo, workspaces }) => {
   const _useNavigate = useNavigate();
+  const {t} = useTranslation()
   const [isSettingModalVisible, setIsSettingModalVisible] = useState(false);
   const SettingMenuItems = [
     {
@@ -116,7 +118,7 @@ const AppHeader: FC<Props> = ({ userinfo, workspaces }) => {
         </RequesterHeaderSectionLeft>
         <RequesterHeaderSectionRight>
           <Button style={{ marginRight: '8px' }} type={'primary'} icon={<UserAddOutlined />}>
-            Invite
+            {t('hello')}
           </Button>
 
           <HoverWrapper
