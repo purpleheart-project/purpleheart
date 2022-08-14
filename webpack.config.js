@@ -88,7 +88,7 @@ module.exports = {
     new CopyWebpackPlugin({
       patterns: [
         {
-          from: "public",
+          from: 'public',
           filter: async (resourcePath) => {
             // 排除index.html
             if (resourcePath.includes('public/index.html')) {
@@ -99,7 +99,8 @@ module.exports = {
             }
             return true;
           },
-        }],
+        },
+      ],
     }),
     isDevelopment && new ReactRefreshPlugin(),
     new ForkTsCheckerWebpackPlugin(),

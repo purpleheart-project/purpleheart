@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import { useRequest } from 'ahooks';
-import {useEffect, useMemo} from 'react';
+import { useEffect, useMemo } from 'react';
 
 import HttpRequest from '../components/http/Request';
 import { treeFind } from '../helpers/collection/util';
@@ -39,10 +39,7 @@ const RequestPage = ({ id }) => {
         height: 1500px;
       `}
     >
-      {
-        data?<HttpRequest id={idd} data={data}></HttpRequest>:null
-      }
-
+      {data ? <HttpRequest id={idd} data={data}></HttpRequest> : null}
     </div>
   );
 };
