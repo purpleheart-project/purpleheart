@@ -1,23 +1,20 @@
-import { ApiOutlined, MoreOutlined } from '@ant-design/icons';
-import { Dropdown, Menu, Popconfirm, Space } from 'antd';
+import { MoreOutlined } from '@ant-design/icons';
+import { css } from '@emotion/react';
+import { Dropdown, Input, Menu, Popconfirm, Space } from 'antd';
 import { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
 
+import { methodMap } from '../../constant';
 import { FileService } from '../../services/FileService';
-import { RequestService } from '../../services/RequestService';
-import {css} from "@emotion/react";
-import {methodMap} from "../../constant";
+import request from '../../services/request';
 
 function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNewRequest }: any) {
-  const _useParams = useParams();
-  const _useNavigate = useNavigate();
   const [visible, setVisible] = useState(false);
   const handleVisibleChange = (flag: boolean) => {
     setVisible(flag);
   };
-  const [CollectionCreateAndUpdateModal, setCollectionCreateAndUpdateModal] = useState({});
+  const [renameKey, setRenameKey] = useState('');
+  const [renameValue, setRenameValue] = useState('');
   const menu = (val: any) => {
-    // console.log(val,'val')
     return (
       <Menu
         onClick={(e) => {
@@ -56,6 +53,8 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
               });
               break;
             case '4':
+              setRenameKey(val.id);
+              setRenameValue(val.name);
               break;
             case '6':
               break;
@@ -114,7 +113,11 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
       <div className={'collection-title-render'}>
         <div className={'left'}>
           {val.nodeType === 1 && val.nodeType === 1 ? (
-            <span css={css(`color:${methodMap[val.requestMethod||'GET'].color};margin-right:4px`)}>{val.requestMethod}</span>
+            <span
+              css={css(`color:${methodMap[val.requestMethod || 'GET'].color};margin-right:4px`)}
+            >
+              {val.requestMethod}
+            </span>
           ) : null}
           {val.nodeType === 2 ? (
             <span
@@ -125,12 +128,35 @@ function CollectionTitle({ val, updateDirectoryTreeData, treeData, callbackOfNew
                 fontSize: '10px',
                 display: 'block',
                 lineHeight: '12px',
+                transform: 'scale(.9)',
               }}
             >
-              case
+              e.g.
             </span>
           ) : null}
-          <div className={'content'}>{val.title}</div>
+          <div className={'content'}>
+            {renameKey === val.id ? (
+              <Input
+                value={renameValue}
+                onPressEnter={() => {
+                  request({
+                    method: 'PATCH',
+                    url: `/api/file/${val.id}`,
+                    data: {
+                      name: renameValue,
+                    },
+                  }).then((res) => {
+                    updateDirectoryTreeData();
+                    setRenameKey('');
+                    setRenameValue('');
+                  });
+                }}
+                onChange={(val) => setRenameValue(val.target.value)}
+              />
+            ) : (
+              <span>{val.title}</span>
+            )}
+          </div>
         </div>
         <div className='right'>
           <Dropdown
