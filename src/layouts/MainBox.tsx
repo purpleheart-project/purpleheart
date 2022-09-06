@@ -15,6 +15,7 @@ import { MenuTypeEnum, PageTypeEnum } from '../constant';
 import EnvironmentPage from '../pages/Environment';
 import FolderPage from '../pages/Folder';
 import RequestPage from '../pages/Request';
+import  {Editor} from '../pages/Test';
 import WorkspacePage from '../pages/Workspace';
 import { useStore } from '../store';
 import DraggableLayout from './DraggableLayout';
@@ -290,6 +291,13 @@ const MainBox = () => {
                 </MainTabPane>
               ))}
             </MainTabs>
+            <div css={css`
+
+height: 200px;
+width: 200px;
+`}>
+              <Editor></Editor>
+            </div>
           </div>
         }
         direction={'horizontal'}
