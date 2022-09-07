@@ -9,9 +9,13 @@ import request from '../services/request';
 import { useStore } from '../store';
 
 const RequestPage = ({ id }) => {
+  console.log(id,'id')
   const { collectionTreeData } = useStore();
   const realId = useMemo(() => {
-    return treeFind(collectionTreeData, (node) => node.key === id)?.relationshipRequestId;
+    return treeFind(collectionTreeData, (node) => {
+      console.log(node.key , id)
+      return node.key === id
+    })?.relationshipRequestId;
   }, [id]);
 
   const {
@@ -21,7 +25,7 @@ const RequestPage = ({ id }) => {
   } = useRequest(
     () => {
       const a = treeFind(collectionTreeData, (node) => node.key === id);
-      return request({ method: 'GET', url: `/api/request/${a?.relationshipRequestId}` });
+      return request({ method: 'POST', url: `/api/retrieverequest`,data:{id:a?.relationshipRequestId} });
     },
     {
       onSuccess: (res) => {

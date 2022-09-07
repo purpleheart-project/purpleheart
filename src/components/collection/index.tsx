@@ -88,7 +88,7 @@ const CollectionMenu = ({ value, onSelect }) => {
     data: treeData = [],
     loading,
     run: fetchTreeData,
-  } = useRequest(() => FileService.listCollections({}), {
+  } = useRequest(() => FileService.getcollectiontree({}), {
     onSuccess: (res) => {
       console.log(res, 'res');
       setCollectionTreeData(res);
@@ -101,7 +101,7 @@ const CollectionMenu = ({ value, onSelect }) => {
       FileService.createACollection({
         name: 'Top Folder',
         nodeType: 3,
-        pid: 0,
+        pid: '',
       }).then((res) => {
         console.log(res);
       }),

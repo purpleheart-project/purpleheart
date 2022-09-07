@@ -15,8 +15,8 @@ const err = (error: any) => {
 
 // request interceptor
 service.interceptors.request.use((config) => {
-  if (localStorage.getItem('accessToken')) {
-    config.headers['access-token'] = localStorage.getItem('accessToken');
+  if (localStorage.getItem('token')) {
+    config.headers['Authorization'] = 'bearer '+ localStorage.getItem('token');
   }
   return config;
 }, err);

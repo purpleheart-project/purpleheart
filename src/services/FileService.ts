@@ -10,7 +10,7 @@ export class FileService {
   static createACollection(params): Promise<any> {
     return request({
       method: 'POST',
-      url: '/api/collection',
+      url: '/api/createfile',
       data: params,
     });
   }
@@ -19,6 +19,14 @@ export class FileService {
     return request({
       method: 'DELETE',
       url: `/api/file/${params.id}`,
+    });
+  }
+
+  static getcollectiontree(params):Promise<any>{
+    return request({
+      method: 'POST',
+      url: `/api/getcollectiontree`,
+      data: params,
     });
   }
 }

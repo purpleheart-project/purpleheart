@@ -12,11 +12,11 @@ import CollectionMenu from '../components/collection';
 import EnvironmentMenu from '../components/environment';
 import Environment from '../components/environment';
 import { MenuTypeEnum, PageTypeEnum } from '../constant';
-import EnvironmentPage from '../pages/Environment';
-import FolderPage from '../pages/Folder';
-import RequestPage from '../pages/Request';
-import  {Editor} from '../pages/Test';
-import WorkspacePage from '../pages/Workspace';
+import { Editor } from '../pages/Test';
+import EnvironmentPage from '../panes/Environment';
+import FolderPage from '../panes/Folder';
+import RequestPage from '../panes/Request';
+import WorkspacePage from '../panes/Workspace';
 import { useStore } from '../store';
 import DraggableLayout from './DraggableLayout';
 
@@ -231,24 +231,33 @@ const MainBox = () => {
               tabPosition='left'
               activeKey={activeMenu[0]}
               onChange={(key) => setActiveMenu(key as MenuTypeEnum)}
+              items={[
+                {
+                  label: <MenuTitle icon={<ApiOutlined />} title='Collection' />,
+                  key: MenuTypeEnum.Collection,
+                  children: (
+                    <CollectionMenu value={activeMenu[1]} onSelect={handleCollectionMenuClick} />
+                  ),
+                },
+              ]}
             >
               {/* menuItem 自定义子组件命名规定: XxxMenu, 表示xx功能的左侧主菜单 */}
               {/* menuItem 自定义子组件 props 约定，便于之后封装  */}
               {/* 1. ref?: 组件ref对象，用于调用组件自身属性方法。尽量不使用，使用前请思考是否还有别的方法 */}
               {/* 1. xxId?: 涉及组件初始化的全局id，之后可以将该参数置于全局状态管理存储 */}
               {/* 2. onSelect: 选中 menu item 时触发，参数（结构待规范）为选中节点的相关信息，点击后的逻辑不在 Menu 组件中处理 */}
-              <MainMenuItem
-                tab={<MenuTitle icon={<ApiOutlined />} title='Collection' />}
-                key={MenuTypeEnum.Collection}
-                menuItem={
-                  <CollectionMenu value={activeMenu[1]} onSelect={handleCollectionMenuClick} />
-                }
-              />
-              <MainMenuItem
-                tab={<MenuTitle icon={<DeploymentUnitOutlined />} title='Environment' />}
-                key={MenuTypeEnum.Environment}
-                menuItem={<EnvironmentMenu />}
-              />
+              {/*<MainMenuItem*/}
+              {/*  tab={<MenuTitle icon={<ApiOutlined />} title='Collection' />}*/}
+              {/*  key={MenuTypeEnum.Collection}*/}
+              {/*  menuItem={*/}
+              {/*    <CollectionMenu value={activeMenu[1]} onSelect={handleCollectionMenuClick} />*/}
+              {/*  }*/}
+              {/*/>*/}
+              {/*<MainMenuItem*/}
+              {/*  tab={<MenuTitle icon={<DeploymentUnitOutlined />} title='Environment' />}*/}
+              {/*  key={MenuTypeEnum.Environment}*/}
+              {/*  menuItem={<EnvironmentMenu />}*/}
+              {/*/>*/}
             </MainMenu>
           </div>
         }
@@ -291,11 +300,12 @@ const MainBox = () => {
                 </MainTabPane>
               ))}
             </MainTabs>
-            <div css={css`
-
-height: 200px;
-width: 200px;
-`}>
+            <div
+              css={css`
+                height: 200px;
+                width: 200px;
+              `}
+            >
               <Editor></Editor>
             </div>
           </div>
