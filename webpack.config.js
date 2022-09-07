@@ -119,7 +119,7 @@ module.exports = {
       template: './public/index.html',
     }),
   ].filter(Boolean),
-  devtool: 'source-map',
+  devtool: isDevelopment?'source-map':false,
   resolve: {
     extensions: ['.js', '.ts', '.tsx'],
   },
