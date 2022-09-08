@@ -2,14 +2,16 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useRequest } from 'ahooks';
 import { Breadcrumb, Button, Input, Select } from 'antd';
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import * as monaco from 'monaco-editor';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 
 import { MethodEnum, METHODS } from '../../constant';
 import { treeFindPath } from '../../helpers/collection/util';
+import AgentAxios from '../../helpers/request';
 import request from '../../services/request';
 import { useStore } from '../../store';
-import * as monaco from "monaco-editor";
-import AgentAxios from "../../helpers/request";
+
+
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -34,7 +36,7 @@ const RequestTypeOptions = METHODS.map((method) => ({
   label: method,
   value: method,
 }));
-const HttpRequest = ({ id,pid, data }) => {
+const HttpRequest = ({ id, pid, data }) => {
   console.log(data, 'data');
   const { collectionTreeData, extensionInstalled, setPanes } = useStore();
   // 如果是case(2)类型的话，就一定有一个父节点，类型也一定是request(1)
@@ -54,29 +56,27 @@ const HttpRequest = ({ id,pid, data }) => {
     setUrl(value);
   };
   const handleRequest = () => {
-    console.log({method,url,e:editor?.getValue()});
+    console.log({ method, url, e: editor?.getValue() });
     AgentAxios({
-      method:method,
+      method: method,
       url,
-      data:JSON.parse(editor?.getValue())
-    }).then(res=>{
-      console.log(res)
-    })
+      data: JSON.parse(editor?.getValue()),
+    }).then((res: any) => {
+      console.log(res);
+      editorRes?.setValue(JSON.stringify(res.data, null, 2));
+    });
   };
-
-  useEffect(() => {
-    setUrl(data.endpoint);
-    setMethod(data.method);
-  }, [data]);
 
   const { run: saveRequest } = useRequest(
     () => {
       return request({
-        method: 'PATCH',
-        url: `/api/request/${id}`,
+        method: 'POST',
+        url: `/api/updaterequest`,
         data: {
+          id,
           method,
-          endpoint:url,
+          endpoint: url,
+          body: editor?.getValue(),
         },
       });
     },
@@ -88,36 +88,45 @@ const HttpRequest = ({ id,pid, data }) => {
   const divEl = useRef<HTMLDivElement>(null);
   // let editor: monaco.editor.IStandaloneCodeEditor;
   const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
+
+  useEffect(() => {
+    setUrl(data.endpoint);
+    setMethod(data.method);
+    editor?.setValue(data.body);
+  }, [data, editor]);
   useEffect(() => {
     if (divEl.current) {
-      setEditor(monaco.editor.create(divEl.current, {
-        value: '',
-        language: 'json'
-      }))
-      // editor = ;
-      // editor?.onDidChangeModelContent((e) => {
-      //   console.log(editor?.getValue(), 'editor?.getValue()');
-      // });
+      setEditor(
+        monaco.editor.create(divEl.current!, {
+          value: '',
+          language: 'json',
+          codeLensFontFamily:'monaco'
+        }),
+      );
     }
     return () => {
-      editor.dispose();
+      editor?.dispose();
     };
-  }, []);
-
+  }, [divEl.current]);
 
   const divElRes = useRef<HTMLDivElement>(null);
-  let editorRes: monaco.editor.IStandaloneCodeEditor;
+  const [editorRes, setEditorRes] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
   useEffect(() => {
     if (divEl.current) {
-      editorRes = monaco.editor.create(divElRes.current, {
-        value: '',
-        language: 'json'
-      });
+      setEditorRes(
+        monaco.editor.create(divElRes.current!, {
+          value: '',
+          language: 'json',
+          theme: 'vs-dark',
+          fontSize:30,
+          fontFamily:'monaco'
+        }),
+      );
     }
     return () => {
-      editorRes.dispose();
+      editorRes?.dispose();
     };
-  }, []);
+  }, [divElRes.current]);
 
   return (
     <div>
@@ -133,7 +142,13 @@ const HttpRequest = ({ id,pid, data }) => {
           ))}
         </Breadcrumb>
         <div>
-          <Button onClick={()=>{saveRequest()}}>Save</Button>
+          <Button
+            onClick={() => {
+              saveRequest();
+            }}
+          >
+            Save
+          </Button>
         </div>
       </div>
       <HeaderWrapper>
@@ -149,9 +164,9 @@ const HttpRequest = ({ id,pid, data }) => {
       </HeaderWrapper>
 
       {/*reqBody*/}
-      <div className="Editor" ref={divEl}></div>
+      <div className='Editor' ref={divEl}></div>
       {/*res*/}
-      <div className="Editor" ref={divElRes}></div>
+      <div className='Editor' ref={divElRes}></div>
     </div>
   );
 };

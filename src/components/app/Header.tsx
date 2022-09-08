@@ -119,7 +119,6 @@ const AppHeader: FC<Props> = ({ userinfo, workspaces }) => {
         <RequesterHeaderSectionRight>
           <Button style={{ marginRight: '8px' }} type={'primary'} icon={<UserAddOutlined />}>
             {t('hello')}
-            啊啊啊啊ssssfff
           </Button>
 
           <HoverWrapper

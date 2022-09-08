@@ -12,7 +12,6 @@ import CollectionMenu from '../components/collection';
 import EnvironmentMenu from '../components/environment';
 import Environment from '../components/environment';
 import { MenuTypeEnum, PageTypeEnum } from '../constant';
-import { Editor } from '../pages/Test';
 import EnvironmentPage from '../panes/Environment';
 import FolderPage from '../panes/Folder';
 import RequestPage from '../panes/Request';
@@ -300,14 +299,6 @@ const MainBox = () => {
                 </MainTabPane>
               ))}
             </MainTabs>
-            <div
-              css={css`
-                height: 200px;
-                width: 200px;
-              `}
-            >
-              <Editor></Editor>
-            </div>
           </div>
         }
         direction={'horizontal'}
