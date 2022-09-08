@@ -2,12 +2,14 @@ import { css } from '@emotion/react';
 import styled from '@emotion/styled';
 import { useRequest } from 'ahooks';
 import { Breadcrumb, Button, Input, Select } from 'antd';
-import { useEffect, useMemo, useState } from 'react';
+import React, {useEffect, useMemo, useRef, useState} from 'react';
 
 import { MethodEnum, METHODS } from '../../constant';
 import { treeFindPath } from '../../helpers/collection/util';
 import request from '../../services/request';
 import { useStore } from '../../store';
+import * as monaco from "monaco-editor";
+import AgentAxios from "../../helpers/request";
 
 const HeaderWrapper = styled.div`
   display: flex;
@@ -52,7 +54,14 @@ const HttpRequest = ({ id,pid, data }) => {
     setUrl(value);
   };
   const handleRequest = () => {
-    console.log(123);
+    console.log({method,url,e:editor?.getValue()});
+    AgentAxios({
+      method:method,
+      url,
+      data:JSON.parse(editor?.getValue())
+    }).then(res=>{
+      console.log(res)
+    })
   };
 
   useEffect(() => {
@@ -75,6 +84,40 @@ const HttpRequest = ({ id,pid, data }) => {
       manual: true,
     },
   );
+
+  const divEl = useRef<HTMLDivElement>(null);
+  // let editor: monaco.editor.IStandaloneCodeEditor;
+  const [editor, setEditor] = useState<monaco.editor.IStandaloneCodeEditor | null>(null);
+  useEffect(() => {
+    if (divEl.current) {
+      setEditor(monaco.editor.create(divEl.current, {
+        value: '',
+        language: 'json'
+      }))
+      // editor = ;
+      // editor?.onDidChangeModelContent((e) => {
+      //   console.log(editor?.getValue(), 'editor?.getValue()');
+      // });
+    }
+    return () => {
+      editor.dispose();
+    };
+  }, []);
+
+
+  const divElRes = useRef<HTMLDivElement>(null);
+  let editorRes: monaco.editor.IStandaloneCodeEditor;
+  useEffect(() => {
+    if (divEl.current) {
+      editorRes = monaco.editor.create(divElRes.current, {
+        value: '',
+        language: 'json'
+      });
+    }
+    return () => {
+      editorRes.dispose();
+    };
+  }, []);
 
   return (
     <div>
@@ -104,6 +147,11 @@ const HttpRequest = ({ id,pid, data }) => {
           Send
         </Button>
       </HeaderWrapper>
+
+      {/*reqBody*/}
+      <div className="Editor" ref={divEl}></div>
+      {/*res*/}
+      <div className="Editor" ref={divElRes}></div>
     </div>
   );
 };
